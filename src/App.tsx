@@ -35,17 +35,26 @@ import { CookingMode } from './components/CookingMode';
 import { NutritionDashboard } from './components/NutritionDashboard';
 // Initialize Gemini
 const getApiKey = () => {
-  const env = (import.meta as any).env || {};
-  return env.VITE_GEMINI_API_KEY || 
-         env.VITE_SMARTMEAL_API_KEY || 
+  const metaEnv = (import.meta as any).env || {};
+  const processEnv = (typeof process !== 'undefined' ? process.env : {}) as any;
+  
+  return metaEnv.VITE_GEMINI_API_KEY || 
+         metaEnv.VITE_SMARTMEAL_API_KEY || 
+         processEnv.VITE_GEMINI_API_KEY ||
+         processEnv.GEMINI_API_KEY ||
+         processEnv.VITE_SMARTMEAL_API_KEY ||
+         processEnv.SMARTMEAL_API_KEY ||
          '';
 };
 
 // Initialize Gemini lazily
 let aiInstance: any = null;
 const getAi = () => {
+  const key = getApiKey();
+  if (!key) {
+    throw new Error('API key not found. Please set GEMINI_API_KEY in your environment variables.');
+  }
   if (!aiInstance) {
-    const key = getApiKey();
     aiInstance = new GoogleGenAI({ apiKey: key });
   }
   return aiInstance;
@@ -167,8 +176,11 @@ export default function App() {
         localStorage.setItem('smartmeal_trending_recipes', JSON.stringify(data));
         localStorage.setItem('smartmeal_trending_date', new Date().toDateString());
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to generate trending recipes:", err);
+      if (err.message?.includes('API_KEY_INVALID') || err.message?.includes('API key not found')) {
+        setError("Invalid API Key. Please check your Vercel Environment Variables.");
+      }
     } finally {
       setIsGeneratingTrending(false);
     }
@@ -401,9 +413,15 @@ export default function App() {
       }));
       
       setRecipes(recipesWithIds);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError("Failed to generate recipes. Please try again.");
+      if (err.message?.includes('API_KEY_INVALID') || err.message?.includes('API key not found')) {
+        setError("Invalid API Key. Please check your Vercel Environment Variables.");
+      } else if (err.message?.includes('quota')) {
+        setError("API Quota exceeded. Please try again later.");
+      } else {
+        setError("Failed to generate recipes. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
