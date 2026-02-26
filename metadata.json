@@ -1,0 +1,5 @@
+{
+  "name": "SmartMeal",
+  "description": "AI-powered recipe generator that turns your ingredients into delicious meals with step-by-step cooking guidance.",
+  "requestFramePermissions": ["camera", "microphone"]
+}
