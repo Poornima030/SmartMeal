@@ -39,7 +39,22 @@ import { RecipeCard } from './components/RecipeCard';
 import { CookingMode } from './components/CookingMode';
 import { NutritionDashboard } from './components/NutritionDashboard';
 // Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.SMARTMEAL_API_KEY || process.env.GEMINI_API_KEY || '' });
+const getApiKey = () => {
+  const env = (import.meta as any).env || {};
+  return env.VITE_GEMINI_API_KEY || 
+         env.VITE_SMARTMEAL_API_KEY || 
+         '';
+};
+
+// Initialize Gemini lazily
+let aiInstance: any = null;
+const getAi = () => {
+  if (!aiInstance) {
+    const key = getApiKey();
+    aiInstance = new GoogleGenAI({ apiKey: key });
+  }
+  return aiInstance;
+};
 const MODEL_NAME = "gemini-3-flash-preview";
 
 export default function App() {
@@ -92,12 +107,9 @@ export default function App() {
   }, []);
 
   const generateDailyTrending = async () => {
-    if (!process.env.GEMINI_API_KEY) return;
-    
     setIsGeneratingTrending(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const response = await ai.models.generateContent({
+      const response = await getAi().models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Generate 5 trending and seasonal recipe ideas for today (${new Date().toDateString()}). 
         Return them as a JSON array of recipe objects with: id, title, description, prepTime, cookTime, servings, difficulty, ingredients (name, amount, category), instructions (text, timer), nutrition (calories, protein, carbs, fat), tags, matchScore (random 85-98), whyThisRecipe.`,
@@ -239,7 +251,7 @@ export default function App() {
       reader.onloadend = async () => {
         const base64Data = (reader.result as string).split(',')[1];
         
-        const response = await ai.models.generateContent({
+        const response = await getAi().models.generateContent({
           model: MODEL_NAME,
           contents: [
             {
@@ -264,7 +276,7 @@ export default function App() {
   };
 
   const generateRecipes = async () => {
-    if (!process.env.SMARTMEAL_API_KEY && !process.env.GEMINI_API_KEY) {
+    if (!getApiKey()) {
       setError("API Key is missing. Please check your environment variables.");
       return;
     }
@@ -303,7 +315,7 @@ export default function App() {
       If Cuisine Style is specified (e.g., 'South Indian'), strictly follow that style.
       Return the response as a JSON array of recipe objects.`;
 
-      const response = await ai.models.generateContent({
+      const response = await getAi().models.generateContent({
         model: MODEL_NAME,
         contents: prompt,
         config: {
