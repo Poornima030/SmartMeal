@@ -108,6 +108,13 @@ export default function App() {
       const cachedTrending = localStorage.getItem('smartmeal_trending_recipes');
       if (cachedTrending) setTrendingRecipes(JSON.parse(cachedTrending));
     }
+
+    // Temporary debug log to help user identify the active API key
+    const activeKey = getApiKey();
+    if (activeKey) {
+      console.log("🛠️ SmartMeal Debug: Active API Key starts with:", activeKey.substring(0, 8));
+      console.log("🛠️ SmartMeal Debug: Active API Key ends with:", activeKey.substring(activeKey.length - 4));
+    }
   }, []);
 
   const generateDailyTrending = async () => {
@@ -469,32 +476,32 @@ export default function App() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] bg-stone-900/40 backdrop-blur-md flex items-center justify-center p-6"
+      className="fixed inset-0 z-[100] bg-stone-900/40 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
       onClick={() => setShowFilters(false)}
     >
       <motion.div 
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="bg-white dark:bg-stone-900 w-full max-w-md rounded-[3rem] p-10 space-y-10 shadow-2xl border border-stone-100 dark:border-stone-800"
+        className="bg-white dark:bg-stone-900 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 space-y-8 sm:space-y-10 shadow-2xl border border-stone-100 dark:border-stone-800 scrollbar-hide"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between">
-          <h3 className="text-3xl font-serif font-bold text-stone-900 dark:text-white">Smart Filters</h3>
-          <button onClick={() => setShowFilters(false)} className="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
-            <X size={24} />
+        <div className="flex items-center justify-between sticky top-0 bg-white dark:bg-stone-900 z-10 pb-4">
+          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-white">Smart Filters</h3>
+          <button onClick={() => setShowFilters(false)} className="p-2 sm:p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
+            <X size={20} className="sm:w-6 sm:h-6" />
           </button>
         </div>
 
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Dietary Preference</h4>
-            <div className="flex flex-wrap gap-2.5">
+        <div className="space-y-6 sm:space-y-8">
+          <div className="space-y-3 sm:space-y-4">
+            <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Dietary Preference</h4>
+            <div className="flex flex-wrap gap-2 sm:gap-2.5">
               {DIETARY_OPTIONS.map((pref) => (
                 <button
                   key={pref}
                   onClick={() => setDietaryPreference(pref as DietaryPreference)}
                   className={cn(
-                    "px-5 py-2.5 rounded-2xl border text-xs font-bold transition-all duration-300",
+                    "px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border text-[10px] sm:text-xs font-bold transition-all duration-300",
                     dietaryPreference === pref 
                       ? "bg-brand-500 border-brand-500 text-white shadow-lg shadow-brand-500/20 scale-105" 
                       : "bg-stone-50 dark:bg-stone-800 border-stone-100 dark:border-stone-700 text-stone-500 hover:border-brand-300"
@@ -506,15 +513,15 @@ export default function App() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Cuisine Style</h4>
-            <div className="flex flex-wrap gap-2.5">
+          <div className="space-y-3 sm:space-y-4">
+            <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Cuisine Style</h4>
+            <div className="flex flex-wrap gap-2 sm:gap-2.5">
               {CUISINE_OPTIONS.map((opt) => (
                 <button
                   key={opt}
                   onClick={() => setCuisine(opt as Cuisine)}
                   className={cn(
-                    "px-5 py-2.5 rounded-2xl border text-xs font-bold transition-all duration-300",
+                    "px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border text-[10px] sm:text-xs font-bold transition-all duration-300",
                     cuisine === opt 
                       ? "bg-brand-500 border-brand-500 text-white shadow-lg shadow-brand-500/20 scale-105" 
                       : "bg-stone-50 dark:bg-stone-800 border-stone-100 dark:border-stone-700 text-stone-500 hover:border-brand-300"
@@ -526,15 +533,15 @@ export default function App() {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Cooking Time</h4>
-            <div className="flex gap-3">
+          <div className="space-y-3 sm:space-y-4">
+            <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Cooking Time</h4>
+            <div className="flex gap-2 sm:gap-3">
               {['< 15 min', '< 30 min', 'Any'].map(time => (
                 <button 
                   key={time} 
                   onClick={() => setCookingTime(time)}
                   className={cn(
-                    "flex-1 py-4 rounded-2xl border text-xs font-bold transition-all",
+                    "flex-1 py-3 sm:py-4 rounded-xl sm:rounded-2xl border text-[10px] sm:text-xs font-bold transition-all",
                     cookingTime === time
                       ? "bg-brand-500 border-brand-500 text-white shadow-lg shadow-brand-500/20"
                       : "bg-stone-50 dark:bg-stone-800 border-stone-100 dark:border-stone-700 text-stone-500 hover:border-brand-300"
@@ -547,16 +554,17 @@ export default function App() {
           </div>
         </div>
 
-        <button 
-          onClick={() => setShowFilters(false)}
-          className="w-full py-5 bg-stone-900 dark:bg-brand-500 text-white rounded-2xl font-bold text-lg shadow-xl shadow-stone-900/20 dark:shadow-brand-500/20 hover:scale-[1.02] transition-all"
-        >
-          Apply Filters
-        </button>
+        <div className="sticky bottom-0 bg-white dark:bg-stone-900 pt-4">
+          <button 
+            onClick={() => setShowFilters(false)}
+            className="w-full py-4 sm:py-5 bg-stone-900 dark:bg-brand-500 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl shadow-stone-900/20 dark:shadow-brand-500/20 hover:scale-[1.02] transition-all"
+          >
+            Apply Filters
+          </button>
+        </div>
       </motion.div>
     </motion.div>
   );
-
   const getGradient = (title: string) => {
     const colors = [
       'from-orange-400 to-rose-500',
@@ -584,13 +592,13 @@ export default function App() {
       <motion.div 
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        className="bg-white dark:bg-stone-900 w-full max-w-4xl max-h-[80vh] overflow-y-auto rounded-[3rem] p-10 space-y-10 shadow-2xl border border-stone-100 dark:border-stone-800"
+        className="bg-white dark:bg-stone-900 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] sm:rounded-[3rem] p-6 sm:p-10 space-y-8 sm:space-y-10 shadow-2xl border border-stone-100 dark:border-stone-800 scrollbar-hide"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between">
-          <h3 className="text-3xl font-serif font-bold text-stone-900 dark:text-white">All Trending Recipes</h3>
-          <button onClick={() => setShowAllTrending(false)} className="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
-            <X size={24} />
+        <div className="flex items-center justify-between sticky top-0 bg-white dark:bg-stone-900 z-10 pb-4">
+          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 dark:text-white">All Trending Recipes</h3>
+          <button onClick={() => setShowAllTrending(false)} className="p-2 sm:p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 text-stone-400 hover:text-stone-900 dark:hover:text-white transition-colors">
+            <X size={20} className="sm:w-6 sm:h-6" />
           </button>
         </div>
 
@@ -946,24 +954,24 @@ export default function App() {
               </button>
 
               <div className={cn(
-                "relative min-h-[400px] rounded-[3rem] overflow-hidden shadow-2xl flex flex-col items-center justify-center p-12 text-center text-white",
+                "relative min-h-[300px] sm:min-h-[400px] rounded-[2.5rem] sm:rounded-[3rem] overflow-hidden shadow-2xl flex flex-col items-center justify-center p-6 sm:p-12 text-center text-white",
                 getGradient(currentRecipe.title)
               )}>
                 <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
-                <div className="relative z-10 space-y-8 w-full max-w-3xl">
-                  <div className="space-y-6">
+                <div className="relative z-10 space-y-6 sm:space-y-8 w-full max-w-3xl">
+                  <div className="space-y-4 sm:space-y-6">
                     <div className="flex flex-wrap justify-center gap-2">
                       {currentRecipe.tags?.map(tag => (
-                        <span key={tag} className="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/30">
+                        <span key={tag} className="px-3 sm:px-4 py-1 sm:py-1.5 bg-white/20 backdrop-blur-md rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest border border-white/30">
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <h2 className="text-4xl md:text-7xl font-serif font-bold leading-tight drop-shadow-2xl">{currentRecipe.title}</h2>
-                    <div className="flex items-center justify-center gap-8 text-sm font-bold uppercase tracking-widest opacity-90">
-                      <span className="flex items-center gap-2 drop-shadow-lg"><Clock size={20} /> {currentRecipe.cookTime}</span>
-                      <span className="flex items-center gap-2 drop-shadow-lg"><Users size={20} /> {currentRecipe.servings} Servings</span>
-                      <span className="flex items-center gap-2 drop-shadow-lg"><Flame size={20} /> {currentRecipe.difficulty}</span>
+                    <h2 className="text-3xl md:text-7xl font-serif font-bold leading-tight drop-shadow-2xl">{currentRecipe.title}</h2>
+                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-[10px] sm:text-sm font-bold uppercase tracking-widest opacity-90">
+                      <span className="flex items-center gap-2 drop-shadow-lg"><Clock size={16} className="sm:w-5 sm:h-5" /> {currentRecipe.cookTime}</span>
+                      <span className="flex items-center gap-2 drop-shadow-lg"><Users size={16} className="sm:w-5 sm:h-5" /> {currentRecipe.servings} Servings</span>
+                      <span className="flex items-center gap-2 drop-shadow-lg"><Flame size={16} className="sm:w-5 sm:h-5" /> {currentRecipe.difficulty}</span>
                     </div>
                   </div>
                 </div>
