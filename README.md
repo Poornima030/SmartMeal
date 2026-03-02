@@ -21,7 +21,10 @@ Experience the AI kitchen yourself by visiting the deployed link:
 
 ## 📸 Screenshots
 
-*(Add your screenshots here to showcase the beautiful UI!)*
+<img width="1899" height="921" alt="image" src="https://github.com/user-attachments/assets/4c515779-4f74-4d84-9cf0-ff47a5f563ac" />
+<img width="1902" height="914" alt="image" src="https://github.com/user-attachments/assets/8a5f0e7f-eb00-4d40-9de2-47f10f8738ae" />
+<img width="1917" height="910" alt="image" src="https://github.com/user-attachments/assets/ba675ca9-9451-424a-b249-fdfe939ddb3f" />
+
 
 ---
 
