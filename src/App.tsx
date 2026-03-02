@@ -126,6 +126,7 @@ export default function App() {
         Return them as a JSON array of recipe objects with: id, title, description, prepTime, cookTime, servings, difficulty, ingredients (name, amount, category), instructions (text, timer), nutrition (calories, protein, carbs, fat), tags, matchScore (random 85-98), whyThisRecipe.`,
         config: {
           responseMimeType: "application/json",
+          maxOutputTokens: 2048, // Increase token limit to prevent truncation
           responseSchema: {
             type: Type.ARRAY,
             items: {
@@ -177,7 +178,15 @@ export default function App() {
         }
       });
 
-      const data = JSON.parse(response.text || '[]');
+      let data;
+      try {
+        const text = response.text?.trim() || '[]';
+        data = JSON.parse(text);
+      } catch (parseError) {
+        console.error("JSON Parse Error in Trending Recipes:", parseError);
+        // Fallback to a simpler structure or empty array if parsing fails
+        data = [];
+      }
       if (data.length > 0) {
         setTrendingRecipes(data);
         localStorage.setItem('smartmeal_trending_recipes', JSON.stringify(data));
