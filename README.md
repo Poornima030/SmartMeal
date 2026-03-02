@@ -1,4 +1,4 @@
-# 🥗 SmartMeal AI - Your Intelligent Kitchen Assistant 🌸
+# 🥗 SmartMeal AI - Your Intelligent Kitchen Assistant 
 
 SmartMeal is a live, fully functional AI-powered recipe generator built with **React**, **TypeScript**, and **Tailwind CSS**, powered by the **Google Gemini API**. It features a modern, "crafted" UI with a focus on ease of use and a premium aesthetic.
 
@@ -10,12 +10,12 @@ Experience the AI kitchen yourself by visiting the deployed link:
 
 ## ✨ Features
 
-- 🧠 **AI Vision & Text**: Snap a photo of your fridge or type in ingredients to get instant, creative recipe ideas.
-- 🎨 **Premium UI/UX**: A beautifully crafted interface with smooth animations, custom gradients, and a focus on readability.
-- 📊 **Nutrition Dashboard**: Real-time nutritional breakdown for every generated recipe.
-- 🍳 **Interactive Cooking Mode**: Step-by-step instructions with built-in timers and voice control.
-- ❤️ **Favorites & History**: Save your favorite AI-generated recipes for later.
-- 📱 **Fully Responsive**: Optimized for everything from mobile phones to large desktop displays.
+-  **AI Vision & Text**: Snap a photo of your fridge or type in ingredients to get instant, creative recipe ideas.
+-  **Premium UI/UX**: A beautifully crafted interface with smooth animations, custom gradients, and a focus on readability.
+-  **Nutrition Dashboard**: Real-time nutritional breakdown for every generated recipe.
+-  **Interactive Cooking Mode**: Step-by-step instructions with built-in timers and voice control.
+-  **Favorites & History**: Save your favorite AI-generated recipes for later.
+-  **Fully Responsive**: Optimized for everything from mobile phones to large desktop displays.
 
 ---
 
