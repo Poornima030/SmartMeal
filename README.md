@@ -21,12 +21,7 @@ Experience the AI kitchen yourself by visiting the deployed link:
 
 ## 📸 Screenshots
 
-<img width="1895" height="908" alt="image" src="https://github.com/user-attachments/assets/bc3a1ae4-ec6a-4a40-9268-25443a9fdeaa" />
-<img width="1728" height="751" alt="image" src="https://github.com/user-attachments/assets/6681375f-cac5-4d96-91ac-b0af8d96da65" />
-<img width="476" height="567" alt="image" src="https://github.com/user-attachments/assets/96235c47-1c58-4451-8c99-bc14defb8251" />
-<img width="1054" height="363" alt="image" src="https://github.com/user-attachments/assets/355cf646-4fc1-4669-90f7-cda8b865c65d" />
-<img width="1906" height="909" alt="image" src="https://github.com/user-attachments/assets/15e29919-6e62-4b56-b11a-17ffb6e99213" />
-
+*(Add your screenshots here to showcase the beautiful UI!)*
 
 ---
 
@@ -86,4 +81,12 @@ npm run dev
 SmartMeal was built to solve the "What's for dinner?" dilemma using cutting-edge AI. Every part of this application, from the logic to the styling, was meticulously crafted to provide a seamless and enjoyable cooking experience.
 
 ---
-*Made with ❤️ by [Your Name]*
+
+## 📄 License & Copyright
+
+© 2024 **Poornima A**. All rights reserved.
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+*Crafted with ❤️ by [Poornima A](https://github.com/Poornima-A)*
