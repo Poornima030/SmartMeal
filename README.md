@@ -89,4 +89,4 @@ SmartMeal was built to solve the "What's for dinner?" dilemma using cutting-edge
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
-*Crafted with ❤️ by [Poornima A](https://github.com/Poornima-A)*
+*Created by [Poornima A](https://github.com/Poornima-A)*
