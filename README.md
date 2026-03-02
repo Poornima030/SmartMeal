@@ -41,7 +41,7 @@ Experience the AI kitchen yourself by visiting the deployed link:
 Clone the repository and install the required packages:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/smart-meal.git
+git clone https://github.com/Poornima030/Smart-Meal
 cd smart-meal
 npm install
 ```
