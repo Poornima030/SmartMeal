@@ -167,7 +167,7 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
               {step.text}
             </h3>
 
-            {step.timer && (
+            {!!step.timer && (
               <div className="w-full flex flex-col items-center gap-6">
                 {timeLeft === null ? (
                   <button 
@@ -175,7 +175,14 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
                     className="flex items-center gap-3 px-8 md:px-12 py-4 md:py-5 bg-brand-600 dark:bg-brand-500 text-white rounded-2xl font-bold text-lg shadow-xl shadow-brand-600/20 dark:shadow-brand-500/20 hover:scale-105 transition-all"
                   >
                     <Timer size={24} />
-                    <span>Start {step.timer / 60}m Timer</span>
+                    <span>
+                      Start {step.timer < 60 
+                        ? `${step.timer}s` 
+                        : step.timer % 60 === 0 
+                          ? `${step.timer / 60}m` 
+                          : `${Math.floor(step.timer / 60)}m ${step.timer % 60}s`
+                      } Timer
+                    </span>
                   </button>
                 ) : (
                   <div className="w-full max-w-md p-6 md:p-8 rounded-[2.5rem] bg-stone-50 dark:bg-stone-900/40 border border-stone-100 dark:border-stone-800/50 shadow-xl space-y-4">
