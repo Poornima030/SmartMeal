@@ -1,4 +1,4 @@
-# 🥗 SmartMeal AI - Your Intelligent Kitchen Assistant 
+# 🥗 SmartMeal AI - Your Intelligent Kitchen Assistant 🌸
 
 SmartMeal is a live, fully functional AI-powered recipe generator built with **React**, **TypeScript**, and **Tailwind CSS**, powered by the **Google Gemini API**. It features a modern, "crafted" UI with a focus on ease of use and a premium aesthetic.
 
@@ -10,21 +10,18 @@ Experience the AI kitchen yourself by visiting the deployed link:
 
 ## ✨ Features
 
--  **AI Vision & Text**: Snap a photo of your fridge or type in ingredients to get instant, creative recipe ideas.
--  **Premium UI/UX**: A beautifully crafted interface with smooth animations, custom gradients, and a focus on readability.
--  **Nutrition Dashboard**: Real-time nutritional breakdown for every generated recipe.
--  **Interactive Cooking Mode**: Step-by-step instructions with built-in timers and voice control.
--  **Favorites & History**: Save your favorite AI-generated recipes for later.
--  **Fully Responsive**: Optimized for everything from mobile phones to large desktop displays.
+- 🧠 **AI Vision & Text**: Snap a photo of your fridge or type in ingredients to get instant, creative recipe ideas.
+- 🎨 **Premium UI/UX**: A beautifully crafted interface with smooth animations, custom gradients, and a focus on readability.
+- 📊 **Nutrition Dashboard**: Real-time nutritional breakdown for every generated recipe.
+- 🍳 **Interactive Cooking Mode**: Step-by-step instructions with built-in timers and voice control.
+- ❤️ **Favorites & History**: Save your favorite AI-generated recipes for later.
+- 📱 **Fully Responsive**: Optimized for everything from mobile phones to large desktop displays.
 
 ---
 
 ## 📸 Screenshots
 
-<img width="1899" height="921" alt="image" src="https://github.com/user-attachments/assets/4c515779-4f74-4d84-9cf0-ff47a5f563ac" />
-<img width="1902" height="914" alt="image" src="https://github.com/user-attachments/assets/8a5f0e7f-eb00-4d40-9de2-47f10f8738ae" />
-<img width="1917" height="910" alt="image" src="https://github.com/user-attachments/assets/ba675ca9-9451-424a-b249-fdfe939ddb3f" />
-
+*(Add your screenshots here to showcase the beautiful UI!)*
 
 ---
 
@@ -41,7 +38,7 @@ Experience the AI kitchen yourself by visiting the deployed link:
 Clone the repository and install the required packages:
 
 ```bash
-git clone https://github.com/Poornima030/Smart-Meal
+git clone https://github.com/YOUR_USERNAME/smart-meal.git
 cd smart-meal
 npm install
 ```
@@ -92,4 +89,4 @@ SmartMeal was built to solve the "What's for dinner?" dilemma using cutting-edge
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
-*Created by [Poornima A](https://github.com/Poornima030)*
+*Crafted with ❤️ by [Poornima A](https://github.com/Poornima-A)*

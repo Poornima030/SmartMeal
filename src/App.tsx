@@ -642,7 +642,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-50 dark">
       <AnimatePresence>
         {showFilters && <FilterModal />}
         {showAllTrending && <TrendingModal />}

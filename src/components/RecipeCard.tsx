@@ -53,7 +53,7 @@ export const RecipeCard: React.FC<Props> = ({ recipe, isFavorite, onToggleFavori
       </div>
 
       <div className="p-8 space-y-6 relative z-0">
-        <div className="space-y-3">
+        <div className="space-y-3 pr-12">
           <h4 className="font-serif font-bold text-2xl leading-tight text-stone-900 dark:text-white group-hover:text-brand-600 transition-colors">
             {recipe.title}
           </h4>

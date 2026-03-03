@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, 
@@ -25,8 +25,22 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [isTimerActive, setIsTimerActive] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const step = recipe.instructions[currentStep];
+
+  useEffect(() => {
+    if (isTimerActive && timeLeft !== null && timeLeft > 0) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3');
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.2;
+      }
+      audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+    } else {
+      audioRef.current?.pause();
+    }
+  }, [isTimerActive, timeLeft]);
 
   useEffect(() => {
     let interval: any;
@@ -66,8 +80,8 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
         utterance.voice = indianVoice;
       }
       
-      utterance.rate = 0.7;
-      utterance.pitch = 1;
+      utterance.rate = 1.1;
+      utterance.pitch = 1.1;
       window.speechSynthesis.speak(utterance);
     } else {
       alert("Text-to-speech is not supported in this browser.");
@@ -119,7 +133,7 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold text-xl mb-4">
               {currentStep + 1}
             </div>
-            <h3 className="text-3xl md:text-5xl font-serif font-bold leading-tight">
+            <h3 className="text-3xl md:text-5xl font-serif font-bold leading-tight text-stone-900 dark:text-white">
               {step.text}
             </h3>
 
