@@ -117,16 +117,17 @@ export default function App() {
     }
   }, []);
 
-  const generateDailyTrending = async () => {
+  const generateDailyTrending = async (retryCount = 0) => {
     setIsGeneratingTrending(true);
     try {
       const response = await getAi().models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: `Generate 5 trending and seasonal recipe ideas for today (${new Date().toDateString()}). 
-        Return them as a JSON array of recipe objects with: id, title, description, prepTime, cookTime, servings, difficulty, ingredients (name, amount, category), instructions (text, timer), nutrition (calories, protein, carbs, fat), tags, matchScore (random 85-98), whyThisRecipe.`,
+        contents: `Generate exactly 5 trending and seasonal recipe ideas for today (${new Date().toDateString()}). 
+        Ensure the output is a valid JSON array. Be concise but complete.`,
         config: {
+          systemInstruction: "You are a professional chef and nutritionist. Always return valid, minified JSON. Do not include any markdown formatting or extra text. Keep descriptions and instructions concise to avoid truncation. Each recipe must be high quality and unique.",
           responseMimeType: "application/json",
-          maxOutputTokens: 2048, // Increase token limit to prevent truncation
+          maxOutputTokens: 8192,
           responseSchema: {
             type: Type.ARRAY,
             items: {
@@ -180,11 +181,42 @@ export default function App() {
 
       let data;
       try {
-        const text = response.text?.trim() || '[]';
+        let text = response.text?.trim() || '[]';
+        // Remove potential markdown code blocks if they exist
+        if (text.startsWith('```json')) {
+          text = text.replace(/^```json/, '').replace(/```$/, '').trim();
+        } else if (text.startsWith('```')) {
+          text = text.replace(/^```/, '').replace(/```$/, '').trim();
+        }
+        
+        // Basic JSON repair for common truncation issues
+        if (!text.endsWith(']') && !text.endsWith('}')) {
+           // If it looks truncated, try to close it
+           // 1. Handle unterminated strings
+           const lastQuoteIndex = text.lastIndexOf('"');
+           const secondLastQuoteIndex = text.lastIndexOf('"', lastQuoteIndex - 1);
+           const quotesCount = (text.match(/"/g) || []).length;
+           if (quotesCount % 2 !== 0) {
+             text += '"';
+           }
+
+           // 2. Handle missing brackets/braces
+           const openBrackets = (text.match(/\[/g) || []).length;
+           const closeBrackets = (text.match(/\]/g) || []).length;
+           const openBraces = (text.match(/\{/g) || []).length;
+           const closeBraces = (text.match(/\}/g) || []).length;
+           
+           if (openBraces > closeBraces) text += '}'.repeat(openBraces - closeBraces);
+           if (openBrackets > closeBrackets) text += ']'.repeat(openBrackets - closeBrackets);
+        }
+
         data = JSON.parse(text);
       } catch (parseError) {
         console.error("JSON Parse Error in Trending Recipes:", parseError);
-        // Fallback to a simpler structure or empty array if parsing fails
+        if (retryCount < 1) {
+          console.log("Retrying trending recipe generation...");
+          return generateDailyTrending(retryCount + 1);
+        }
         data = [];
       }
       if (data.length > 0) {

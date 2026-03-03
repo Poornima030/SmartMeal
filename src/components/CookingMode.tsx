@@ -26,21 +26,33 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [isTimerActive, setIsTimerActive] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const finishAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const step = recipe.instructions[currentStep];
 
+  // Initialize audio objects
+  useEffect(() => {
+    audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73456.mp3');
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.2;
+
+    finishAudioRef.current = new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'); // A clear "ding" sound
+    finishAudioRef.current.volume = 0.5;
+
+    return () => {
+      audioRef.current?.pause();
+      finishAudioRef.current?.pause();
+    };
+  }, []);
+
+  // Handle background music play/pause
   useEffect(() => {
     if (isTimerActive && timeLeft !== null && timeLeft > 0) {
-      if (!audioRef.current) {
-        audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73456.mp3');
-        audioRef.current.loop = true;
-        audioRef.current.volume = 0.2;
-      }
-      audioRef.current.play().catch(e => console.log("Audio play failed:", e));
+      audioRef.current?.play().catch(e => console.log("Background music play failed:", e));
     } else {
       audioRef.current?.pause();
     }
-  }, [isTimerActive, timeLeft]);
+  }, [isTimerActive, timeLeft === 0]);
 
   useEffect(() => {
     let interval: any;
@@ -50,6 +62,7 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
       }, 1000);
     } else if (timeLeft === 0) {
       setIsTimerActive(false);
+      finishAudioRef.current?.play().catch(e => console.log("Finish sound play failed:", e));
       if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
     }
     return () => clearInterval(interval);
