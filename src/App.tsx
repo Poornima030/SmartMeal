@@ -235,10 +235,14 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (recipes.length > 0) {
-      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // Removed automatic scroll to results as per user request
   }, [recipes]);
+
+  useEffect(() => {
+    if (currentRecipe && !isCooking) {
+      window.scrollTo(0, 0);
+    }
+  }, [currentRecipe, isCooking]);
 
   useEffect(() => {
     localStorage.setItem('smartmeal_favorites', JSON.stringify(favorites));
