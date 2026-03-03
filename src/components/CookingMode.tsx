@@ -32,7 +32,7 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
   useEffect(() => {
     if (isTimerActive && timeLeft !== null && timeLeft > 0) {
       if (!audioRef.current) {
-        audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3');
+        audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73456.mp3');
         audioRef.current.loop = true;
         audioRef.current.volume = 0.2;
       }
