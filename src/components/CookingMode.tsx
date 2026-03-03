@@ -32,16 +32,21 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
 
   // Initialize audio objects
   useEffect(() => {
-    audioRef.current = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73456.mp3');
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.2;
+    // Using a more reliable relaxing track
+    const music = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3');
+    music.loop = true;
+    music.volume = 0.15;
+    audioRef.current = music;
 
-    finishAudioRef.current = new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3'); // A clear "ding" sound
-    finishAudioRef.current.volume = 0.5;
+    const ding = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+    ding.volume = 0.4;
+    finishAudioRef.current = ding;
 
     return () => {
-      audioRef.current?.pause();
-      finishAudioRef.current?.pause();
+      music.pause();
+      music.src = '';
+      ding.pause();
+      ding.src = '';
     };
   }, []);
 
@@ -52,7 +57,7 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
     } else {
       audioRef.current?.pause();
     }
-  }, [isTimerActive, timeLeft === 0]);
+  }, [isTimerActive, timeLeft]);
 
   useEffect(() => {
     let interval: any;
@@ -109,15 +114,15 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
       className="fixed inset-0 z-[100] bg-white dark:bg-stone-950 flex flex-col"
     >
       {/* Header */}
-      <div className="px-8 py-8 flex items-center justify-between border-b border-stone-100 dark:border-stone-800 bg-white/50 dark:bg-stone-950/50 backdrop-blur-md">
-        <button onClick={onClose} className="w-12 h-12 flex items-center justify-center rounded-2xl bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition-all">
-          <X size={24} />
+      <div className="px-4 md:px-8 py-4 md:py-6 flex items-center justify-between border-b border-stone-100 dark:border-stone-800 bg-white dark:bg-stone-950">
+        <button onClick={onClose} className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-stone-100 dark:bg-stone-900 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition-all">
+          <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>
-        <div className="flex flex-col items-center">
-          <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400">Cooking Mode</h2>
-          <p className="text-sm font-serif font-bold text-stone-900 dark:text-white truncate max-w-[200px]">{recipe.title}</p>
+        <div className="flex flex-col items-center text-center px-2">
+          <h2 className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] text-brand-600 dark:text-brand-400">Cooking Mode</h2>
+          <p className="text-xs md:text-sm font-serif font-bold text-stone-900 dark:text-white truncate max-w-[150px] md:max-w-[300px]">{recipe.title}</p>
         </div>
-        <div className="w-12" />
+        <div className="w-10 md:w-12" />
       </div>
 
       {/* Progress Bar */}
@@ -133,121 +138,113 @@ export const CookingMode: React.FC<Props> = ({ recipe, onClose }) => {
         ))}
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 text-center max-w-3xl mx-auto w-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 1.1, y: -20 }}
-            className="space-y-8"
-          >
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold text-xl mb-4">
-              {currentStep + 1}
-            </div>
-            <h3 className="text-3xl md:text-5xl font-serif font-bold leading-tight text-stone-900 dark:text-white">
-              {step.text}
-            </h3>
-
-            {step.timer && (
-              <div className="pt-8 flex justify-center w-full">
-                {timeLeft === null ? (
-                  <button 
-                    onClick={() => startTimer(step.timer!)}
-                    className="flex items-center gap-3 px-10 py-5 bg-brand-600 dark:bg-brand-500 text-white rounded-2xl font-bold shadow-xl shadow-brand-600/20 dark:shadow-brand-500/20 hover:scale-105 transition-all"
-                  >
-                    <Timer size={24} />
-                    <span>Start {step.timer / 60}m Timer</span>
-                  </button>
-                ) : (
-                  <div className="space-y-4">
-                    <div className={cn(
-                      "text-7xl font-mono font-bold",
-                      timeLeft === 0 ? "text-red-500 animate-bounce" : "text-brand-700 dark:text-brand-400"
-                    )}>
-                      {formatTime(timeLeft)}
-                    </div>
-                    <div className="flex justify-center gap-4">
-                      <button 
-                        onClick={() => setIsTimerActive(!isTimerActive)}
-                        className="p-4 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600"
-                      >
-                        {isTimerActive ? <Pause size={24} /> : <Play size={24} />}
-                      </button>
-                      <button 
-                        onClick={() => setTimeLeft(step.timer!)}
-                        className="p-4 rounded-full bg-stone-100 dark:bg-stone-900 text-stone-600"
-                      >
-                        <RotateCcw size={24} />
-                      </button>
-                    </div>
-                    <button 
-                      onClick={() => {
-                        if (currentStep === recipe.instructions.length - 1) {
-                          onClose();
-                        } else {
-                          setCurrentStep(prev => prev + 1);
-                          setTimeLeft(null);
-                          setIsTimerActive(false);
-                        }
-                      }}
-                      className="text-xs font-bold text-brand-600 uppercase tracking-widest hover:underline"
-                    >
-                      Skip to next step
-                    </button>
-                  </div>
-                )}
+      {/* Scrollable Content Area */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <div className="min-h-full flex flex-col items-center justify-center px-6 md:px-8 py-12 md:py-20 text-center max-w-4xl mx-auto w-full">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 1.05, y: -10 }}
+              className="w-full space-y-8 md:space-y-12"
+            >
+              <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-bold text-xl md:text-3xl shadow-inner">
+                {currentStep + 1}
               </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+              
+              <h3 className="text-3xl md:text-5xl lg:text-7xl font-serif font-bold leading-[1.1] text-stone-900 dark:text-white px-2 tracking-tight">
+                {step.text}
+              </h3>
+
+              {step.timer && (
+                <div className="pt-6 md:pt-10 flex flex-col items-center gap-8">
+                  {timeLeft === null ? (
+                    <button 
+                      onClick={() => startTimer(step.timer!)}
+                      className="flex items-center gap-4 px-10 md:px-14 py-5 md:py-7 bg-brand-600 dark:bg-brand-500 text-white rounded-[2rem] font-bold text-xl shadow-2xl shadow-brand-600/30 dark:shadow-brand-500/30 hover:scale-105 active:scale-95 transition-all"
+                    >
+                      <Timer size={28} />
+                      <span>Start {step.timer / 60}m Timer</span>
+                    </button>
+                  ) : (
+                    <div className="w-full max-w-md p-8 md:p-12 rounded-[3rem] bg-stone-50 dark:bg-stone-900/50 border border-stone-100 dark:border-stone-800 shadow-2xl space-y-8">
+                      <div className={cn(
+                        "text-7xl md:text-9xl font-mono font-bold tracking-tighter tabular-nums",
+                        timeLeft === 0 ? "text-red-500 animate-pulse" : "text-brand-700 dark:text-brand-400"
+                      )}>
+                        {formatTime(timeLeft)}
+                      </div>
+                      <div className="flex justify-center gap-6">
+                        <button 
+                          onClick={() => setIsTimerActive(!isTimerActive)}
+                          className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 shadow-xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all border border-stone-100 dark:border-stone-700"
+                        >
+                          {isTimerActive ? <Pause size={32} /> : <Play size={32} className="ml-1" />}
+                        </button>
+                        <button 
+                          onClick={() => setTimeLeft(step.timer!)}
+                          className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 shadow-xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all border border-stone-100 dark:border-stone-700"
+                        >
+                          <RotateCcw size={32} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Controls */}
-      <div className="px-8 py-12 space-y-8">
-        <div className="flex justify-center gap-6">
-          <button 
-            onClick={speakStep}
-            className="w-20 h-20 rounded-full bg-brand-500 text-white flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95"
-          >
-            <Volume2 size={32} />
-          </button>
-        </div>
+      {/* Fixed Bottom Controls */}
+      <div className="px-6 md:px-8 py-6 md:py-10 bg-white dark:bg-stone-950 border-t border-stone-100 dark:border-stone-800 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="flex justify-center">
+            <button 
+              onClick={speakStep}
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-500 text-white flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 group relative"
+            >
+              <div className="absolute inset-0 rounded-full bg-brand-500 animate-ping opacity-20 group-hover:opacity-40" />
+              <Volume2 size={32} className="relative z-10" />
+            </button>
+          </div>
 
-        <div className="flex gap-4 max-w-xl mx-auto w-full">
-          <button
-            disabled={currentStep === 0}
-            onClick={() => { setCurrentStep(prev => prev - 1); setTimeLeft(null); setIsTimerActive(false); }}
-            className="flex-1 py-5 rounded-3xl bg-stone-200 dark:bg-stone-900 font-bold text-stone-800 dark:text-stone-300 disabled:opacity-30 flex items-center justify-center gap-2"
-          >
-            <ChevronLeft size={24} />
-            <span>Previous</span>
-          </button>
-          <button
-            onClick={() => {
-              if (currentStep === recipe.instructions.length - 1) {
-                onClose();
-              } else {
-                setCurrentStep(prev => prev + 1);
-                setTimeLeft(null);
-                setIsTimerActive(false);
-              }
-            }}
-            className="flex-[2] py-5 rounded-3xl bg-brand-600 dark:bg-brand-500 text-white font-bold shadow-xl shadow-brand-600/30 dark:shadow-brand-500/30 flex items-center justify-center gap-2 hover:bg-brand-700 dark:hover:bg-brand-600 transition-all"
-          >
-            {currentStep === recipe.instructions.length - 1 ? (
-              <>
-                <CheckCircle2 size={24} />
-                <span>Finish Cooking</span>
-              </>
-            ) : (
-              <>
-                <span>Next Step</span>
-                <ChevronRight size={24} />
-              </>
-            )}
-          </button>
+          <div className="flex gap-4 md:gap-6">
+            <button
+              disabled={currentStep === 0}
+              onClick={() => { setCurrentStep(prev => prev - 1); setTimeLeft(null); setIsTimerActive(false); }}
+              className="flex-1 py-5 md:py-7 rounded-2xl md:rounded-[2rem] bg-stone-100 dark:bg-stone-900 font-bold text-stone-800 dark:text-stone-300 disabled:opacity-30 flex items-center justify-center gap-2 hover:bg-stone-200 dark:hover:bg-stone-800 transition-all"
+            >
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+              <span>Previous</span>
+            </button>
+            <button
+              onClick={() => {
+                if (currentStep === recipe.instructions.length - 1) {
+                  onClose();
+                } else {
+                  setCurrentStep(prev => prev + 1);
+                  setTimeLeft(null);
+                  setIsTimerActive(false);
+                }
+              }}
+              className="flex-[2] py-5 md:py-7 rounded-2xl md:rounded-[2rem] bg-brand-600 dark:bg-brand-500 text-white font-bold shadow-2xl shadow-brand-600/30 dark:shadow-brand-500/30 flex items-center justify-center gap-2 hover:bg-brand-700 dark:hover:bg-brand-600 transition-all"
+            >
+              {currentStep === recipe.instructions.length - 1 ? (
+                <>
+                  <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6" />
+                  <span>Finish Cooking</span>
+                </>
+              ) : (
+                <>
+                  <span>Next Step</span>
+                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
